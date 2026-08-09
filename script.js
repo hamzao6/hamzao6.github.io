@@ -20,49 +20,49 @@ const projects = [
     category: "banner",
     title: "Instagram Banner",
     description: "A bold social banner made for a product launch campaign.",
-    images: ["images/instagram-banner.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "poster",
     title: "Event Poster",
     description: "A vibrant poster designed for a local live music event.",
-    images: ["images/event-poster-1.jpg", "images/event-poster-2.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "cover",
     title: "Podcast Cover Art",
     description: "Cover artwork designed for a weekly design podcast.",
-    images: ["images/podcast-cover.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "tshirt",
     title: "Streetwear Graphic Tee",
     description: "A graphic tee design inspired by 90s skate culture.",
-    images: ["images/streetwear-tee-front.jpg", "images/streetwear-tee-back.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "packaging",
     title: "Tea Tin Packaging",
     description: "Packaging design for a small-batch specialty tea brand.",
-    images: ["images/tea-packaging-1.jpg", "images/tea-packaging-2.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "illustration",
     title: "Retro Sunset Illustration",
     description: "A hand-built vector illustration in a Y2K poster style.",
-    images: ["images/illustration-1.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "uiux",
     title: "Fitness App Concept",
     description: "A mobile app UI concept exploring a bold, playful visual system.",
-    images: ["images/uiux-1.jpg", "images/uiux-2.jpg", "images/uiux-3.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "photography",
     title: "Product Shoot — Ceramics",
     description: "Product photography and light retouching for a ceramics shop.",
-    images: ["images/photo-1.jpg", "images/photo-2.jpg"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   }
 ];
 
