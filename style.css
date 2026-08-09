@@ -784,9 +784,9 @@ h1, h2, h3 {
    SCROLL REVEAL ANIMATION
    ========================================================== */
 .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  opacity: 1;
+  transform: translateY(0);
+  /* transition: opacity 0.6s ease, transform 0.6s ease; */
 }
 
 .reveal.visible {
