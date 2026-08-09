@@ -8,13 +8,13 @@ const projects = [
     category: "logo",
     title: "Cedar & Co. Logo",
     description: "A minimal wordmark logo for a boutique furniture brand.",
-    images: ["images/Baby stroll.png", "images/Baby shop mockup.png"]
+    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
   },
   {
     category: "branding",
     title: "Willow Studio Branding",
     description: "Full brand identity including logo, color system, and stationery.",
-    images: ["images/NOVA logo.png", "images/NOVA Coffee Shop Branding Mockup.png"]
+    images: ["images/NOVA logo.jpg", "images/NOVA Coffee Shop Branding Mockup.jpg"]
   },
   {
     category: "banner",
