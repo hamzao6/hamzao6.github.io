@@ -1,0 +1,1155 @@
+/* ==========================================================
+   ROOT VARIABLES — Y2K / Vaporwave / Riso-print palette
+   ========================================================== */
+:root {
+  --pink: #ff6ec7;
+  --purple: #a663f7;
+  --cyan: #4dd0e1;
+  --yellow: #ffe066;
+  --bg-dark: #0d0221;
+  --bg-panel: #1a0b2e;
+  --text-dim: #cfc7e8;
+  --display-font: 'Bungee', cursive;
+  --mono-font: 'Space Mono', monospace;
+}
+
+/* ==========================================================
+   BASE / RESET
+   ========================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: white;
+  font-family: var(--mono-font);
+  padding: 0 40px 40px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+h1, h2, h3 {
+  font-weight: normal;
+  font-family: var(--display-font);
+}
+
+/* ==========================================================
+   GRAIN / GRAPHITE TEXTURE OVERLAY
+   A fixed layer of noise sitting over the entire page, blended
+   with "overlay" mode so it reads like graphite/print grain
+   instead of a flat pattern. Pure CSS/SVG, no image file needed.
+   ========================================================== */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================
+   SHARED "OFFSET PRINT" HEADLINE STYLE
+   Mimics a mis-registered riso/screen print: a duplicate of the
+   text sits slightly offset in a second color behind the real
+   text. Achieved with a ::before pseudo-element using the same
+   text via a data-text attribute (CSS content: attr()).
+   ========================================================== */
+.hero-title,
+.section-title {
+  position: relative;
+  display: inline-block;
+  color: var(--pink);
+  letter-spacing: 1px;
+}
+
+.hero-title::before,
+.section-title::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  color: var(--cyan);
+  transform: translate(4px, 4px);
+}
+
+/* ==========================================================
+   DECORATIVE SHAPES (shared base)
+   ========================================================== */
+.deco-shape {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+.deco-star {
+  font-size: 40px;
+  color: var(--yellow);
+  top: 30px;
+  right: 8%;
+  text-shadow: 0 0 12px rgba(255, 224, 102, 0.6);
+}
+
+.deco-star.small {
+  font-size: 24px;
+  top: -10px;
+  left: 6%;
+  right: auto;
+}
+
+.deco-badge {
+  top: 60px;
+  left: 6%;
+  border: 2px dashed var(--cyan);
+  color: var(--cyan);
+  font-family: var(--mono-font);
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  transform: rotate(-8deg);
+}
+
+.deco-blob {
+  width: 120px;
+  height: 100px;
+  right: 4%;
+  bottom: 10%;
+  background: var(--purple);
+  opacity: 0.35;
+  border-radius: 58% 42% 60% 40% / 45% 55% 45% 55%;
+}
+
+.deco-circle-ring {
+  width: 140px;
+  height: 140px;
+  border: 2px solid var(--purple);
+  border-radius: 50%;
+  right: -50px;
+  top: 20px;
+  opacity: 0.5;
+}
+
+.deco-dashed-box {
+  width: 90px;
+  height: 90px;
+  border: 2px dashed var(--pink);
+  right: 0;
+  top: -20px;
+  border-radius: 12px;
+  opacity: 0.6;
+}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 90px 0 90px;
+  overflow: hidden;
+}
+
+.sun-scene {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 260px;
+  z-index: 0;
+  transition: filter 0.2s linear;
+}
+
+.sun {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--yellow), var(--pink) 55%, var(--purple));
+  box-shadow: 0 0 60px rgba(255, 110, 199, 0.4);
+  opacity: 0.5;
+}
+
+.horizon-grid {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: 90px;
+  background-image:
+    linear-gradient(rgba(77, 208, 225, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77, 208, 225, 0.5) 1px, transparent 1px);
+  background-size: 34px 20px;
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+  mask-image: linear-gradient(to bottom, black, transparent);
+  opacity: 0.6;
+}
+
+.hero > *:not(.deco-shape):not(.sun-scene) {
+  position: relative;
+  z-index: 1;
+}
+
+/* profile photo — "taped sticker" frame */
+.profile-frame {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 6px 6px 0 var(--purple);
+  transform: rotate(-3deg);
+  transition: transform 0.3s ease;
+}
+
+.profile-frame:hover .profile-pic {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.tape {
+  position: absolute;
+  width: 34px;
+  height: 14px;
+  background: rgba(255, 224, 102, 0.55);
+  border: 1px solid rgba(255, 224, 102, 0.8);
+}
+
+.tape-tl {
+  top: -6px;
+  left: 10px;
+  transform: rotate(-40deg);
+}
+
+.tape-br {
+  bottom: -6px;
+  right: 10px;
+  transform: rotate(-40deg);
+}
+
+.hero-title {
+  font-size: 44px;
+  margin: 10px 0 0;
+  transition: transform 0.25s ease-out;
+  will-change: transform;
+}
+
+.hero-role {
+  font-family: var(--mono-font);
+  color: var(--text-dim);
+  font-weight: bold;
+  margin: 10px 0 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.hero .intro {
+  max-width: 480px;
+  margin: 20px auto 0;
+  color: var(--text-dim);
+  font-family: var(--mono-font);
+}
+
+.scroll-cue {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.7;
+}
+
+.scroll-cue span {
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(var(--cyan), transparent);
+  animation: scrollDrip 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollDrip {
+  0% { transform: scaleY(0.3); opacity: 0.3; }
+  50% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(0.3); opacity: 0.3; }
+}
+
+.scroll-cue p {
+  font-family: var(--mono-font);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* ==========================================================
+   RETRO CHECKERBOARD DIVIDER
+   ========================================================== */
+.checker-strip {
+  height: 22px;
+  margin: 20px -40px 0;
+  background-image:
+    linear-gradient(45deg, var(--bg-panel) 25%, transparent 25%, transparent 75%, var(--bg-panel) 75%),
+    linear-gradient(45deg, var(--bg-panel) 25%, transparent 25%, transparent 75%, var(--bg-panel) 75%);
+  background-size: 22px 22px;
+  background-position: 0 0, 11px 11px;
+  background-color: #2b0f3f;
+  opacity: 0.8;
+}
+
+/* ==========================================================
+   SPLASH SCREEN
+   ========================================================== */
+.splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0d0221, #2b0f3f, #0f2b3f);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  overflow: hidden;
+}
+
+.splash.closed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash-grid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background-image:
+    linear-gradient(rgba(166, 99, 247, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(166, 99, 247, 0.35) 1px, transparent 1px);
+  background-size: 40px 24px;
+  -webkit-mask-image: linear-gradient(to top, black, transparent);
+  mask-image: linear-gradient(to top, black, transparent);
+}
+
+.splash-text {
+  position: relative;
+  font-family: var(--display-font);
+  font-size: 38px;
+  letter-spacing: 2px;
+  color: var(--pink);
+}
+
+.splash-text::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  color: var(--cyan);
+  transform: translate(3px, 3px);
+}
+
+.splash-sub {
+  position: relative;
+  font-family: var(--mono-font);
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.splash-btn {
+  position: relative;
+  margin-top: 30px;
+}
+
+/* ==========================================================
+   NAVBAR — retro "stamp" logo instead of gradient text
+   ========================================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  margin: 0 -40px;
+  background: linear-gradient(90deg, #2b0f3f, #4a1259, #0f2b3f);
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 30px rgba(166, 99, 247, 0.35);
+  transition: padding 0.3s ease;
+}
+
+.navbar.scrolled {
+  padding: 8px 40px;
+  box-shadow: 0 4px 20px rgba(166, 99, 247, 0.5);
+}
+
+.logo-stamp {
+  font-family: var(--display-font);
+  font-size: 16px;
+  color: var(--bg-dark);
+  background: var(--yellow);
+  border: 3px solid var(--pink);
+  padding: 6px 12px;
+  border-radius: 6px;
+  transform: rotate(-4deg);
+  box-shadow: 3px 3px 0 var(--cyan);
+  transition: transform 0.25s ease;
+}
+
+.logo-stamp:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  font-family: var(--mono-font);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-links a {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background: var(--pink);
+  box-shadow: 0 0 6px var(--pink);
+  transition: width 0.25s ease;
+}
+
+.nav-links a:hover {
+  color: var(--pink);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+.btn {
+  display: inline-block;
+  margin-top: 28px;
+  background: var(--yellow);
+  color: #0d0221;
+  padding: 12px 28px;
+  border: 3px solid var(--pink);
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: var(--display-font);
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--purple);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--purple);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--purple);
+}
+
+/* ==========================================================
+   FILTERS
+   ========================================================== */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+  position: relative;
+  z-index: 1;
+  font-family: var(--mono-font);
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid #4a3466;
+  color: var(--text-dim);
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--mono-font);
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.filter-btn.active {
+  border-color: var(--pink);
+  color: var(--pink);
+  box-shadow: 0 0 10px rgba(255, 110, 199, 0.4);
+}
+
+/* ==========================================================
+   GALLERY / CARDS — trading-card retro look
+   ========================================================== */
+#work-heading {
+  margin-top: 50px;
+  position: relative;
+  z-index: 1;
+  font-size: 30px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  background-color: var(--bg-panel);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #2e1a4d;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px) rotate(-1deg);
+  border-color: var(--purple);
+}
+
+.card-number {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--yellow);
+  color: var(--bg-dark);
+  font-family: var(--mono-font);
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.thumb {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background-color: #2e1a4d;
+}
+
+.card-title {
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 14px;
+  font-family: var(--mono-font);
+}
+
+.card-count {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--cyan);
+  padding: 0 16px 12px;
+  margin: -8px 0 0;
+  font-family: var(--mono-font);
+}
+
+/* ==========================================================
+   LIGHTBOX / MODAL — with full-size toggle
+   ========================================================== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(13, 2, 33, 0.9);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.modal.open {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-content {
+  background: var(--bg-panel);
+  border-radius: 14px;
+  padding: 20px;
+  max-width: 560px;
+  width: 90%;
+  position: relative;
+  border: 2px solid var(--purple);
+  box-shadow: 0 0 40px rgba(166, 99, 247, 0.35);
+  transition: max-width 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+/* full-size mode: near-fullscreen, image shown uncropped */
+.modal.fullsize .modal-content {
+  width: fit-content;
+  max-width: 96vw;
+  height: fit-content;
+  max-height: 96vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.fullsize .modal-viewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.fullsize .modal-thumb {
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 70vh;
+  object-fit: contain;
+  background-color: transparent;
+}
+
+.modal-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.fullsize-btn {
+  background: transparent;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-family: var(--mono-font);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.fullsize-btn:hover {
+  background: var(--cyan);
+  color: var(--bg-dark);
+}
+
+.modal-close {
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+
+.modal-viewer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  touch-action: pan-y;
+}
+
+.modal-thumb {
+  width: 100%;
+  height: 260px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  object-fit: cover;
+  background-color: #2e1a4d;
+  cursor: zoom-in;
+  transition: opacity 0.2s ease;
+  display: block;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(13, 2, 33, 0.7);
+  border: 1px solid var(--purple);
+  color: var(--cyan);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 2;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: var(--purple);
+  color: white;
+}
+
+.nav-btn.prev {
+  left: 8px;
+}
+
+.nav-btn.next {
+  right: 8px;
+}
+
+.nav-btn.hidden {
+  display: none;
+}
+
+.modal-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 12px 0 16px;
+}
+
+.modal-dots .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4a3466;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.modal-dots .dot.active {
+  background: var(--pink);
+  transform: scale(1.3);
+}
+
+.modal-category {
+  color: var(--pink);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--mono-font);
+}
+
+#modal-title {
+  font-size: 20px;
+}
+
+#modal-description {
+  font-family: var(--mono-font);
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* ==========================================================
+   SCROLL REVEAL ANIMATION
+   ========================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================
+   ABOUT — two-column collage layout
+   ========================================================== */
+.about {
+  position: relative;
+  padding: 70px 0;
+  border-top: 1px solid #2e1a4d;
+  overflow: hidden;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 50px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.about-photo-frame {
+  position: relative;
+  transform: rotate(-4deg);
+  transition: transform 0.3s ease;
+}
+
+.about-photo-frame:hover {
+  transform: rotate(0deg);
+}
+
+.about-photo {
+  width: 100%;
+  border: 4px solid white;
+  box-shadow: 6px 6px 0 var(--cyan);
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+.about-stamp {
+  position: absolute;
+  bottom: -14px;
+  right: -14px;
+  background: var(--pink);
+  color: var(--bg-dark);
+  font-family: var(--display-font);
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transform: rotate(6deg);
+}
+
+.about-text .section-title {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.about-text p {
+  max-width: 560px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  font-family: var(--mono-font);
+  font-size: 14px;
+}
+
+.about-text p::first-letter {
+  font-family: var(--display-font);
+  font-size: 42px;
+  color: var(--pink);
+  float: left;
+  line-height: 0.8;
+  margin: 8px 8px 0 0;
+}
+
+/* ==========================================================
+   SKILLS — scattered sticker collage
+   ========================================================== */
+.skills {
+  position: relative;
+  padding: 60px 0 80px;
+  border-top: 1px solid #2e1a4d;
+}
+
+.skills .section-title {
+  font-size: 28px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.skills-collage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.skill-sticker {
+  font-family: var(--mono-font);
+  font-weight: bold;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bg-dark);
+  background: var(--yellow);
+  border: 2px solid var(--bg-dark);
+  padding: 12px 20px;
+  border-radius: 8px;
+  transform: rotate(var(--r, 0deg));
+  box-shadow: 4px 4px 0 var(--purple);
+  cursor: default;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.skill-sticker:nth-child(2n) {
+  background: var(--cyan);
+}
+
+.skill-sticker:nth-child(3n) {
+  background: var(--pink);
+  color: white;
+}
+
+.skill-sticker:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.06);
+  box-shadow: 6px 8px 0 var(--purple);
+}
+
+/* ==========================================================
+   CONTACT
+   ========================================================== */
+.contact {
+  position: relative;
+  padding: 60px 0;
+  border-top: 1px solid #2e1a4d;
+  text-align: center;
+  overflow: hidden;
+}
+
+.contact .section-title {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.contact p {
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+  font-family: var(--mono-font);
+}
+
+.contact .btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================
+   FOOTER — marquee ticker + stamp badges
+   ========================================================== */
+.footer {
+  position: relative;
+  margin: 0 -40px;
+  padding: 0 0 30px;
+  background: linear-gradient(90deg, #0f2b3f, #2b0f3f);
+  border-radius: 16px 16px 0 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.marquee {
+  overflow: hidden;
+  border-bottom: 2px dashed var(--cyan);
+  padding: 14px 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeScroll 16s linear infinite;
+  font-family: var(--display-font);
+  font-size: 18px;
+  color: var(--yellow);
+}
+
+body[data-scroll-dir="up"] .marquee-track {
+  animation-direction: reverse;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.footer-content {
+  padding: 40px 40px 0;
+}
+
+.footer-stamp {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.footer-badge {
+  display: inline-block;
+  color: var(--bg-dark);
+  background: var(--text-dim);
+  text-decoration: none;
+  font-family: var(--mono-font);
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.footer-badge:hover {
+  transform: rotate(-4deg) scale(1.05);
+  background: var(--cyan);
+  border-color: white;
+}
+
+.footer-note {
+  color: #6e5c94;
+  font-size: 12px;
+  font-family: var(--mono-font);
+  margin: 0;
+}
+
+/* ==========================================================
+   SCROLL TO TOP BUTTON
+   ========================================================== */
+.scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-dark);
+  background: var(--yellow);
+  color: var(--bg-dark);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  box-shadow: 3px 3px 0 var(--purple);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  z-index: 50;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ==========================================================
+   RESPONSIVE — TABLET
+   ========================================================== */
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .splash-text {
+    font-size: 28px;
+  }
+
+  .deco-circle-ring {
+    width: 90px;
+    height: 90px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .about-photo-frame {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 32px;
+  }
+}
+
+/* ==========================================================
+   RESPONSIVE — MOBILE
+   ========================================================== */
+@media (max-width: 480px) {
+  body {
+    padding: 0 20px 20px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .checker-strip {
+    margin: 20px -20px 0;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 26px;
+  }
+
+  .footer {
+    margin: 0 -20px;
+  }
+
+  .footer-content {
+    padding: 30px 20px 0;
+  }
+
+  .deco-badge, .deco-circle-ring, .deco-dashed-box, .deco-blob {
+    display: none;
+  }
+}
+
+/* ==========================================================
+   REDUCED MOTION — respect user preference
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .deco-shape, .hero-title, .marquee-track, .scroll-cue span {
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .reveal, .splash-text {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
