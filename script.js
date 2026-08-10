@@ -8,61 +8,61 @@ const projects = [
     category: "logo",
     title: "Cedar & Co. Logo",
     description: "A minimal wordmark logo for a boutique furniture brand.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "branding",
     title: "Willow Studio Branding",
     description: "Full brand identity including logo, color system, and stationery.",
-    images: ["images/Emberandplate_logo.png", "images/EMBER & PLATE.jpg"]
+    images: ["images/nova_logo.jpg", "images/mockup2.jpg"]
   },
   {
     category: "banner",
     title: "Instagram Banner",
     description: "A bold social banner made for a product launch campaign.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/ember_logo.png", "images/mockup3.jpg"]
   },
   {
     category: "poster",
     title: "Event Poster",
     description: "A vibrant poster designed for a local live music event.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "cover",
     title: "Podcast Cover Art",
     description: "Cover artwork designed for a weekly design podcast.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "tshirt",
     title: "Streetwear Graphic Tee",
     description: "A graphic tee design inspired by 90s skate culture.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "packaging",
     title: "Tea Tin Packaging",
     description: "Packaging design for a small-batch specialty tea brand.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "illustration",
     title: "Retro Sunset Illustration",
     description: "A hand-built vector illustration in a Y2K poster style.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "uiux",
     title: "Fitness App Concept",
     description: "A mobile app UI concept exploring a bold, playful visual system.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   },
   {
     category: "photography",
     title: "Product Shoot — Ceramics",
     description: "Product photography and light retouching for a ceramics shop.",
-    images: ["images/Baby stroll.jpg", "images/Baby shop mockup.jpg"]
+    images: ["images/baby_logo.jpg", "images/mockup1.jpg"]
   }
 ];
 
