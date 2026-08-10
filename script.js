@@ -14,7 +14,7 @@ const projects = [
     category: "branding",
     title: "Willow Studio Branding",
     description: "Full brand identity including logo, color system, and stationery.",
-    images: ["images/Nova logo.jpg", "images/NOVA Coffee Shop Branding Mockup.jpg"]
+    images: ["images/Emberandplate_logo.png", "images/EMBER & PLATE.jpg"]
   },
   {
     category: "banner",
