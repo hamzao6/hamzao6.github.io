@@ -1,7 +1,8 @@
 /* ==========================================================
    PROJECT DATA
-   Each project holds an ARRAY of images. The first image is
-   the gallery thumbnail. Add a project by copying one block.
+   Categories now match the brief's filters exactly:
+   logos, branding, social, print, merch.
+   Each project holds an array of images (first = thumbnail).
    ========================================================== */
 const projects = [
   {
@@ -67,7 +68,11 @@ const projects = [
 ];
 
 /* ==========================================================
-   BUILD GALLERY CARDS FROM THE DATA ABOVE
+   BUILD GALLERY CARDS
+   Text-only by design: category, title, optional short description,
+   and an arrow. No project image renders here — cards are sized by
+   their own content, never by an uploaded image's dimensions, so
+   new projects always slot in cleanly with no gaps or cropping.
    ========================================================== */
 const gallery = document.getElementById("gallery");
 
@@ -77,15 +82,14 @@ projects.forEach(function (project, index) {
   card.setAttribute("data-category", project.category);
   card.setAttribute("data-index", index);
 
-  const countLabel = project.images.length > 1
-    ? '<span class="card-count">' + project.images.length + ' images</span>'
-    : "";
-
   card.innerHTML =
-    '<span class="card-number">' + String(index + 1).padStart(2, "0") + '</span>' +
-    '<img class="thumb" src="' + project.images[0] + '" alt="' + project.title + '">' +
-    '<p class="card-title">' + project.title + '</p>' +
-    countLabel;
+    '<p class="card-cat">' + project.category + '</p>' +
+    '<div>' +
+      '<div class="card-title-row">' +
+        '<p class="card-title">' + project.title + '</p>' +
+        '<span class="card-arrow">&rarr;</span>' +
+      '</div>' +
+    '</div>';
 
   gallery.appendChild(card);
 });
@@ -94,33 +98,27 @@ const filterButtons = document.querySelectorAll(".filter-btn");
 const cards = document.querySelectorAll(".card");
 
 /* ==========================================================
-   CARD FILTERING
+   FILTERING
    ========================================================== */
 filterButtons.forEach(function (button) {
   button.addEventListener("click", function () {
-
-    filterButtons.forEach(function (btn) {
-      btn.classList.remove("active");
-    });
+    filterButtons.forEach(function (btn) { btn.classList.remove("active"); });
     button.classList.add("active");
 
-    const selectedCategory = button.getAttribute("data-filter");
+    const selected = button.getAttribute("data-filter");
 
     cards.forEach(function (card) {
-      const cardCategory = card.getAttribute("data-category");
-
-      if (selectedCategory === "all" || selectedCategory === cardCategory) {
-        card.style.display = "block";
-      } else {
-        card.style.display = "none";
-      }
+      const cat = card.getAttribute("data-category");
+      card.style.display = (selected === "all" || selected === cat) ? "block" : "none";
     });
-
   });
 });
 
 /* ==========================================================
-   LIGHTBOX / MODAL — multi-image + full-size viewer
+   LIGHTBOX — image presentation is fully decoupled from the card
+   grid. The modal always shows the complete image at its natural
+   aspect ratio (object-fit: contain in CSS), so there's no "full
+   size" mode to toggle — this IS the normal view now.
    ========================================================== */
 const modal = document.getElementById("modal");
 const modalViewer = document.getElementById("modal-viewer");
@@ -132,7 +130,6 @@ const modalClose = document.getElementById("modal-close");
 const modalPrev = document.getElementById("modal-prev");
 const modalNext = document.getElementById("modal-next");
 const modalDots = document.getElementById("modal-dots");
-const fullsizeBtn = document.getElementById("fullsize-btn");
 
 let currentProject = null;
 let currentImageIndex = 0;
@@ -140,11 +137,9 @@ let currentImageIndex = 0;
 function openLightbox(project) {
   currentProject = project;
   currentImageIndex = 0;
-
   modalTitle.textContent = project.title;
   modalCategory.textContent = project.category;
   modalDescription.textContent = project.description;
-
   renderImage();
   modal.classList.add("open");
 }
@@ -152,27 +147,22 @@ function openLightbox(project) {
 function renderImage() {
   const image = currentProject.images[currentImageIndex];
   modalThumb.src = image;
+  modalThumb.alt = currentProject.title;
 
   const hasMultiple = currentProject.images.length > 1;
   modalPrev.classList.toggle("hidden", !hasMultiple);
   modalNext.classList.toggle("hidden", !hasMultiple);
-
   renderDots();
 }
 
 function renderDots() {
   modalDots.innerHTML = "";
+  if (currentProject.images.length <= 1) return;
 
-  if (currentProject.images.length <= 1) {
-    return;
-  }
-
-  currentProject.images.forEach(function (image, i) {
+  currentProject.images.forEach(function (img, i) {
     const dot = document.createElement("span");
     dot.classList.add("dot");
-    if (i === currentImageIndex) {
-      dot.classList.add("active");
-    }
+    if (i === currentImageIndex) dot.classList.add("active");
     modalDots.appendChild(dot);
   });
 }
@@ -191,192 +181,70 @@ function showPrevImage() {
 
 function closeLightbox() {
   modal.classList.remove("open");
-  modal.classList.remove("fullsize");
-  fullsizeBtn.textContent = "\u2721 Full Size";
 }
 
 cards.forEach(function (card) {
   card.addEventListener("click", function () {
-    const projectIndex = card.getAttribute("data-index");
-    openLightbox(projects[projectIndex]);
+    openLightbox(projects[card.getAttribute("data-index")]);
   });
 });
 
 modalNext.addEventListener("click", showNextImage);
 modalPrev.addEventListener("click", showPrevImage);
-
-/* Full-size toggle — via the toolbar button OR clicking the image itself */
-function toggleFullsize() {
-  const isFullsize = modal.classList.toggle("fullsize");
-  fullsizeBtn.textContent = isFullsize ? "\u2716 Exit Full Size" : "\u2721 Full Size";
-}
-
-fullsizeBtn.addEventListener("click", toggleFullsize);
-modalThumb.addEventListener("click", toggleFullsize);
-
-/* Keyboard navigation */
-document.addEventListener("keydown", function (event) {
-  if (!modal.classList.contains("open")) {
-    return;
-  }
-  if (event.key === "ArrowRight") {
-    showNextImage();
-  } else if (event.key === "ArrowLeft") {
-    showPrevImage();
-  } else if (event.key === "Escape") {
-    closeLightbox();
-  } else if (event.key === "f" || event.key === "F") {
-    toggleFullsize();
-  }
-});
-
-/* Mobile swipe navigation */
-let touchStartX = 0;
-
-modalViewer.addEventListener("touchstart", function (event) {
-  touchStartX = event.touches[0].clientX;
-});
-
-modalViewer.addEventListener("touchend", function (event) {
-  const touchEndX = event.changedTouches[0].clientX;
-  const distance = touchStartX - touchEndX;
-  const SWIPE_THRESHOLD = 50;
-
-  if (Math.abs(distance) > SWIPE_THRESHOLD) {
-    if (distance > 0) {
-      showNextImage();
-    } else {
-      showPrevImage();
-    }
-  }
-});
-
 modalClose.addEventListener("click", closeLightbox);
 
 modal.addEventListener("click", function (event) {
-  if (event.target === modal) {
-    closeLightbox();
-  }
+  if (event.target === modal) closeLightbox();
+});
+
+document.addEventListener("keydown", function (event) {
+  if (!modal.classList.contains("open")) return;
+  if (event.key === "ArrowRight") showNextImage();
+  else if (event.key === "ArrowLeft") showPrevImage();
+  else if (event.key === "Escape") closeLightbox();
+});
+
+let touchStartX = 0;
+modalViewer.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; });
+modalViewer.addEventListener("touchend", function (e) {
+  const dist = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(dist) > 50) { dist > 0 ? showNextImage() : showPrevImage(); }
 });
 
 /* ==========================================================
-   SCROLL REVEAL ANIMATION
+   SCROLL REVEAL — single restrained fade-up
    ========================================================== */
-const revealElements = document.querySelectorAll(".reveal");
-
 const revealObserver = new IntersectionObserver(function (entries) {
   entries.forEach(function (entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-    }
+    if (entry.isIntersecting) entry.target.classList.add("visible");
   });
-}, {
-  threshold: 0.2
-});
+}, { threshold: 0.15 });
 
-revealElements.forEach(function (el) {
+document.querySelectorAll(".reveal").forEach(function (el) {
   revealObserver.observe(el);
 });
 
 /* ==========================================================
-   SCROLL DIRECTION + SCROLL-LINKED INTERACTIONS
-
-   Everything here is written as a function of the CURRENT
-   scroll value (scrollY), never as a one-off "play once"
-   animation. That's what makes it automatically reverse when
-   the user scrolls back up — there's no separate "undo"
-   animation to write, the same formula just produces a
-   smaller number as scrollY decreases.
+   CASE STUDY IMAGE FALLBACK — same idea as the gallery cards
    ========================================================== */
-const decoShapes = document.querySelectorAll(".deco-shape");
-const checkerStrip = document.getElementById("checker-strip");
-const navbar = document.getElementById("navbar");
-const sunScene = document.getElementById("sun-scene");
-const heroTitle = document.getElementById("hero-title");
-
-let lastScrollY = window.scrollY;
-let scrollSettleTimer = null;
-
-function updateScrollEffects() {
-  const scrollY = window.scrollY;
-  const scrollDelta = scrollY - lastScrollY; // positive = scrolling down
-
-  /* Track direction on <body> so CSS can react (e.g. marquee direction) */
-  document.body.setAttribute("data-scroll-dir", scrollDelta >= 0 ? "down" : "up");
-
-  /* Parallax + rotation for every decorative sticker/shape */
-  decoShapes.forEach(function (shape) {
-    const speed = parseFloat(shape.getAttribute("data-speed")) || 0.2;
-    const rotateSpeed = parseFloat(shape.getAttribute("data-rotate")) || 0;
-    const offset = scrollY * speed;
-    const rotation = scrollY * rotateSpeed;
-    shape.style.transform = "translateY(" + offset + "px) rotate(" + rotation + "deg)";
+document.querySelectorAll(".case-media img").forEach(function (img) {
+  img.addEventListener("error", function () {
+    const wrapper = img.closest(".case-media");
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+    wrapper.style.justifyContent = "center";
+    wrapper.style.background = "var(--line)";
+    wrapper.style.height = "460px";
+    wrapper.innerHTML = '<span style="font-size:13px;color:var(--ink-soft);font-weight:600;">Image not added yet</span>';
   });
-
-  /* Checkerboard floor slides sideways with scroll position */
-  if (checkerStrip) {
-    checkerStrip.style.backgroundPosition =
-      (scrollY * 0.3) + "px 0, " + (scrollY * 0.3 + 11) + "px 11px";
-  }
-
-  /* Navbar compacts once scrolled past 60px */
-  if (navbar) {
-    navbar.classList.toggle("scrolled", scrollY > 60);
-  }
-
-  /* Sun scene drifts through a hue-rotate based on overall page progress */
-  if (sunScene) {
-    const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = pageHeight > 0 ? scrollY / pageHeight : 0;
-    sunScene.style.filter = "hue-rotate(" + (progress * 60) + "deg)";
-  }
-
-  /* Headline reacts to scroll VELOCITY: fast scroll = quick skew "wobble",
-     which settles back to 0 automatically once scrolling stops */
-  if (heroTitle) {
-    const skew = Math.max(-6, Math.min(6, scrollDelta * 0.5));
-    heroTitle.style.transform = "skewY(" + skew + "deg)";
-  }
-
-  lastScrollY = scrollY;
-
-  /* After scrolling stops for 150ms, ease the headline skew back to 0 */
-  clearTimeout(scrollSettleTimer);
-  scrollSettleTimer = setTimeout(function () {
-    if (heroTitle) {
-      heroTitle.style.transform = "skewY(0deg)";
-    }
-  }, 150);
-}
-
-window.addEventListener("scroll", updateScrollEffects);
-updateScrollEffects();
-
-/* ==========================================================
-   SPLASH SCREEN
-   ========================================================== */
-const splash = document.getElementById("splash");
-const splashEnter = document.getElementById("splash-enter");
-
-splashEnter.addEventListener("click", function () {
-  splash.classList.add("closed");
 });
 
 /* ==========================================================
-   SCROLL TO TOP BUTTON
+   NAVBAR — border appears once scrolled, nothing else moves
    ========================================================== */
-const scrollTopBtn = document.getElementById("scroll-top");
-
+const navbar = document.getElementById("navbar");
 window.addEventListener("scroll", function () {
-  if (window.scrollY > 400) {
-    scrollTopBtn.classList.add("visible");
-  } else {
-    scrollTopBtn.classList.remove("visible");
-  }
-});
-
-scrollTopBtn.addEventListener("click", function () {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  navbar.classList.toggle("scrolled", window.scrollY > 40);
 });
 
 /* ==========================================================
